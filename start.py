@@ -49,7 +49,7 @@ plot_document_similarity = False
 	select which LDA model to use
 	1: LDA model with 16 topics trained on 72,000 publication abstracts of all 50 fisheries journals from 2000-2017, 
 		-	Mapping the global network of fisheries science collaboration
-		-	https:doi.org/10.1111/faf.12379 (online soon)
+		-	https://doi.org/10.1111/faf.12379 (online soon)
 	2: LDA model with 25 topics trained on 46,000 full-text publications from 21 fisheries journals from 1990-2016
 		-	Narrow lenses for capturing the complexity of fisheries: A topic analysis of fisheries science from 1990 to 2016
 		-	https://doi.org/10.1111/faf.12280
