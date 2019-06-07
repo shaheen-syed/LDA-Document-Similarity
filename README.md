@@ -2,14 +2,14 @@
 
 Use pre-trained latent Dirichlet allocation (LDA) models to infer document-topic distributions from a set of PDFs. The document-topic distribution provides an overview of what topics are found within each of the PDF documents, and in what proportion (topic 1 = 20%, topic 2 = 5% etc.).
 
-Such document-topic distributions can then be used to calculate the similarity between two PDF documents. Here similarity is calculated with the Hellinger distance, a measure to calculate the distance between two probability distribution. Note that the Hellinger distance is symmetrical, meaning the distance between x and y = distance between y and x; contrary to KL-divergence for instance.
+Such document-topic distributions can then be used to calculate the similarity between two PDF documents. Here similarity is calculated with the Hellinger distance, a measure to calculate the distance between two probability distributions. Note that the Hellinger distance is symmetrical, meaning the distance between x and y = distance between y and x; contrary to KL-divergence for instance.
 
 ## What to do first
 
 Add PDFs to the folder files/pdf
 
 Packages required:
-logging, textract, glob2, spacy, nltk, seaborn, numpy, pandas, matplotlib, gensim, multiprocessing, joblib
+logging, textract, glob2, spacy, nltk, seaborn, numpy, pandas, matplotlib, gensim, multiprocessing, joblib, scipy
 
 Install spacy with the following commands:
 ```
@@ -29,10 +29,10 @@ use chardet==2.3.0 for textract (to convert pdf to plain text). The latest versi
 ## How to run
 
 ```
-start.py
+python start.py
 ```
 
-## What switches to turn on (set to True)
+## Which switches to turn on (set to True)
 
 There are 6 switches that can be set to True, either all at the same time, or by turning them on one-by-one
 
@@ -64,11 +64,14 @@ There are 6 switches that can be set to True, either all at the same time, or by
 	* creates similarities.csv
 
 * plot_document_similarity
-	* plot document similarity (num_publications x num_publications)
+	* plot dendrogram
+	* creates similarities_dendrogram.pdf
+	* plot document similarity heatmap (num_publications x num_publications)
+	* creates similarities.pdf
 
-## What topic model to use
+## Which topic model to use
 
-There are 2 trained LDA models included in the files/lda folder. Note that these models are trained using corpora from the domain of fisheries science. Infering document-topic distributions will correctly work only if the PDFs can be categorized as 'fisheries'.
+There are 2 trained LDA models included in the files/lda folder. Note that these models are trained using corpora from the domain of fisheries science. Inferring document-topic distributions will correctly work only if the PDFs can be categorized as 'fisheries'.
 
 * model 1
 	* LDA model with 16 topics trained on 72,000 publication abstracts of all 50 fisheries journals from 2000-2017, 

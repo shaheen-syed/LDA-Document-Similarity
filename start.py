@@ -24,12 +24,13 @@
 import logging
 import re # use regular expressions
 from datetime import datetime
+from helper_functions import *
 from gensim import corpora, models # for latent dirichlet allocation
 import pandas as pd # for dataframes
 import matplotlib.pyplot as plt # for plotting
 import seaborn as sns # for plotting
 import numpy as np # for vectors and arrays
-from helper_functions import *
+import scipy.cluster.hierarchy as shc # for dendrogram
 
 # for parallel processing
 from multiprocessing import cpu_count
@@ -42,19 +43,19 @@ perform_tokenization = False
 perform_topic_inference = False
 plot_topics_in_documents = False
 perform_document_similarity = False
-plot_document_similarity = False
+plot_document_similarity = True
 
 
 """
 	select which LDA model to use
 	1: LDA model with 16 topics trained on 72,000 publication abstracts of all 50 fisheries journals from 2000-2017, 
 		-	Mapping the global network of fisheries science collaboration
-		-	https://doi.org/10.1111/faf.12379 (online soon)
+		-	https:doi.org/10.1111/faf.12379 (online soon)
 	2: LDA model with 25 topics trained on 46,000 full-text publications from 21 fisheries journals from 1990-2016
 		-	Narrow lenses for capturing the complexity of fisheries: A topic analysis of fisheries science from 1990 to 2016
 		-	https://doi.org/10.1111/faf.12280
 """
-lda_type = 1
+lda_type = 2
 
 
 """
@@ -87,7 +88,8 @@ def process_pdf_to_plain(f, i = 1, total = 1):
 		# some pre-processing of the text (conversion from PDF to plain text, especially with two columns and hyphens can be corrected)
 		plain_text = full_text_preprocessing(plain_text)
 
-		# remove french part for certain articles (Can. j. Fish. Science)		
+		# remove french part for certain articles (Can. j. Fish. Science)
+		# this is use case specific and should be commented out		
 		plain_text = re.sub(r'Re\xb4sume\xb4.*?\[Traduit par la Re\xb4daction\]', '', plain_text)
 		plain_text = re.sub(r'R\xe9sum\xe9.*?\[Traduit par la R\xe9daction\]', '', plain_text)
 
@@ -352,6 +354,30 @@ if __name__ == "__main__":
 		# read topic distribution as dataframe
 		df = pd.read_csv(similarities_file_location, index_col = 0)
 
+		"""
+			Plot dendrogram
+		"""
+
+		# create the figure 
+		fig, _ = plt.subplots(1,1, figsize=(20, 10))
+
+		# get dendogram linkages
+		linkages = shc.linkage(df, method='average')
+		
+		# plot dendogram
+		dendrogram = shc.dendrogram(linkages, labels = df.columns, orientation = 'right', distance_sort = True, show_contracted = True)
+	
+		# save figure
+		fig.savefig(os.path.join(topic_distribution_location, 'similarities_dendrogram.pdf'), bbox_inches='tight')
+
+		# close the plot
+		plt.close()
+
+
+		"""
+			Plot heatmap
+		"""
+	
 		# plot the heatmap, note that cmap has _r, meaning reverse so low values get darker colors
 		ax = sns.heatmap(df, cmap = "Blues_r", annot = True, vmin = 0., vmax = .3, square = True, annot_kws = {"size": 11}, fmt = '.2f', mask= df <= 0.0, linewidths = .5, cbar = False, yticklabels=True, xticklabels=True)
 
