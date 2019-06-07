@@ -24,12 +24,12 @@
 import logging
 import re # use regular expressions
 from datetime import datetime
-from helper_functions import *
 from gensim import corpora, models # for latent dirichlet allocation
 import pandas as pd # for dataframes
 import matplotlib.pyplot as plt # for plotting
 import seaborn as sns # for plotting
 import numpy as np # for vectors and arrays
+from helper_functions import *
 
 # for parallel processing
 from multiprocessing import cpu_count
@@ -116,10 +116,10 @@ if __name__ == "__main__":
 		"""
 
 		# read PDF files from folder
-		F = read_directory(os.path.join('files', 'pdf'))[70:]
+		F = read_directory(os.path.join('files', 'pdf'))
 
 		# define if parallel processing should be on/off
-		parallel = False
+		parallel = True
 
 		if parallel:
 			# use parallel processing to speed up processing time
